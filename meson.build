@@ -340,24 +340,15 @@ else
     udev_hwdb_dir = ''
 endif
 
-if get_option('gtk-examples')
-    gtk_dep = dependency('gtk+-3.0', required: false)
-    if not gtk_dep.found()
-        error('GTK+ 3.x is required for GTK+ examples')
-    endif
-endif
+
 
 # Some dependency resolving happens inside here
 subdir('libfprint')
 
 configure_file(output: 'config.h', configuration: libfprint_conf)
 
-if get_option('doc')
-    subdir('doc')
-endif
-if get_option('gtk-examples')
-    subdir('demo')
-endif
+
+
 
 subdir('data')
 subdir('tests')

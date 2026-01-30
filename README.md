@@ -1,105 +1,83 @@
+# LibFPrint - CS9711 Driver (Fedora KDE 43+)
 
-# Proposal fork for support of Chipsailing CS9711Fingprint
+This is a fork of [libfprint](https://fprint.freedesktop.org/) designed to support the **Chipsailing CS9711** fingerprint reader. It is maintained to ensure compatibility with **Fedora KDE 43** and newer versions.
 
-This is a continuation of @ddlsmurf's [Chipsailing CS9711 driver](https://github.com/ddlsmurf/libfprint-CS9711). The purpose of this fork is to maintain the CS9711 driver by regularly rebasing its code and the underlying [sigfm MR](https://gitlab.freedesktop.org/libfprint/libfprint/-/merge_requests/530) onto subsequent libfprint releases until both are merged upstream. Bug reports for the driver code itself and contributions (including distribution specific installation instructions) are welcome.
+## Overview
 
-**No garantees are made by this author as to the validity and security of this code,
-while this author is very happy with the result, it should not be used for anything
-serious without serious testing.**
+This repository provides the `libfprint` library patched with the CS9711 driver. It is intended for users who need to enable this specific fingerprint reader on Fedora Linux.
 
-# Original `README.md` left below
-<hr />
+## Requirements
 
-<div align="center">
+- **OS**: Fedora Linux 43 or later (KDE Plasma edition tested, but should work on Workstation).
+- **Hardware**: Chipsailing CS9711 Fingerprint Reader.
 
-# LibFPrint
+## Installation
 
-*LibFPrint is part of the **[FPrint][Website]** project.*
+### 1. Install Build Dependencies
 
-<br/>
+Open a terminal and install the necessary development packages:
 
-[![Button Website]][Website]
-[![Button Documentation]][Documentation]
+```bash
+sudo dnf install meson gcc gcc-c++ ninja-build \
+    glib2-devel libusb1-devel pixman-devel \
+    openssl-devel libgudev-devel libgusb-devel gobject-introspection-devel \
+    opencv-devel doctest-devel cmake \
+    gtk-doc # (Optional, if you re-enable docs)
+```
 
-[![Button Supported]][Supported]
-[![Button Unsupported]][Unsupported]
+### 2. Build and Install
 
-[![Button Contribute]][Contribute]
-[![Button Contributors]][Contributors]
+Run the following commands to compile and install the library:
 
-</div>
+```bash
+# Optional: Clean previous build if it exists
+rm -rf build
 
-## History
+# Setup the build directory
+meson setup build --prefix=/usr
 
-**LibFPrint** was originally developed as part of an
-academic project at the **[University Of Manchester]**.
+# Compile the project
+meson compile -C build
 
-It aimed to hide the differences between consumer
-fingerprint scanners and provide a single uniform
-API to application developers.
+# Install to system
+sudo meson install -C build
+```
 
-## Goal
+### 3. Post-Installation
 
-The ultimate goal of the **FPrint** project is to make
-fingerprint scanners widely and easily usable under
-common Linux environments.
+After installation, reload the udev rules and restart the fingerprint daemon:
+
+```bash
+sudo udevadm control --reload-rules && sudo udevadm trigger
+sudo systemctl restart fprintd
+```
+
+You can now register your fingerprint using the KDE System Settings ("Users") or via the command line.
+
+To enroll a specific finger, use the `-f` flag with the finger name:
+
+```bash
+# Enroll right index finger (default)
+fprintd-enroll -f right-index-finger
+
+# Enroll left index finger
+fprintd-enroll -f left-index-finger
+```
+
+**Valid finger names:**
+- `right-thumb`, `right-index-finger`, `right-middle-finger`, `right-ring-finger`, `right-little-finger`
+- `left-thumb`, `left-index-finger`, `left-middle-finger`, `left-ring-finger`, `left-little-finger`
 
 ## License
 
-`Section 6` of the license states that for compiled works that use
-this library, such works must include **LibFPrint** copyright notices
-alongside the copyright notices for the other parts of the work.
+This project is licensed under the **LGPL-2.1+**. See the `COPYING` file for details.
+**LibFPrint** includes code from NIST's NBIS software distribution.
 
-**LibFPrint** includes code from **NIST's** **[NBIS]** software distribution.
+## Disclaimer
 
-We include **Bozorth3** from the **[US Export Controlled]**
-distribution, which we have determined to be fine
-being shipped in an open source project.
+This driver is a community fork. No guarantees are made as to the validity and security of this code. Use at your own risk.
 
-## Get in *touch*
+## Credits
 
- - [IRC] - `#fprint` @ `irc.oftc.net`
- - [Matrix] - `#fprint:matrix.org` bridged to the IRC channel
- - [MailingList] - low traffic, not much used these days
-
-<br/>
-
-<div align="right">
-
-[![Badge License]][License]
-
-</div>
-
-
-<!----------------------------------------------------------------------------->
-
-[Documentation]: https://fprint.freedesktop.org/libfprint-dev/
-[Contributors]: https://gitlab.freedesktop.org/libfprint/libfprint/-/graphs/master
-[Unsupported]: https://gitlab.freedesktop.org/libfprint/wiki/-/wikis/Unsupported-Devices
-[Supported]: https://fprint.freedesktop.org/supported-devices.html
-[Website]: https://fprint.freedesktop.org/
-[MailingList]: https://lists.freedesktop.org/mailman/listinfo/fprint
-[IRC]: ircs://irc.oftc.net:6697/#fprint
-[Matrix]: https://matrix.to/#/#fprint:matrix.org
-
-[Contribute]: ./HACKING.md
-[License]: ./COPYING
-
-[University Of Manchester]: https://www.manchester.ac.uk/
-[US Export Controlled]: https://fprint.freedesktop.org/us-export-control.html
-[NBIS]: http://fingerprint.nist.gov/NBIS/index.html
-
-
-<!---------------------------------[ Badges ]---------------------------------->
-
-[Badge License]: https://img.shields.io/badge/License-LGPL2.1-015d93.svg?style=for-the-badge&labelColor=blue
-
-
-<!---------------------------------[ Buttons ]--------------------------------->
-
-[Button Documentation]: https://img.shields.io/badge/Documentation-04ACE6?style=for-the-badge&logoColor=white&logo=BookStack
-[Button Contributors]: https://img.shields.io/badge/Contributors-FF4F8B?style=for-the-badge&logoColor=white&logo=ActiGraph
-[Button Unsupported]: https://img.shields.io/badge/Unsupported_Devices-EF2D5E?style=for-the-badge&logoColor=white&logo=AdBlock
-[Button Contribute]: https://img.shields.io/badge/Contribute-66459B?style=for-the-badge&logoColor=white&logo=Git
-[Button Supported]: https://img.shields.io/badge/Supported_Devices-428813?style=for-the-badge&logoColor=white&logo=AdGuard
-[Button Website]: https://img.shields.io/badge/Homepage-3B80AE?style=for-the-badge&logoColor=white&logo=freedesktopDotOrg
+- Original CS9711 driver by @ddlsmurf.
+- LibFPrint project by the freedesktop.org community.
