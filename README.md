@@ -13,7 +13,16 @@ This repository provides the `libfprint` library patched with the CS9711 driver.
 
 ## Installation
 
-### 1. Install Build Dependencies
+### 1. Get the Source Code
+
+Start by cloning this repository and navigating into it:
+
+```bash
+git clone https://github.com/nightcodex7/libfprint-CS9711-fedorakde.git
+cd libfprint-CS9711-fedorakde
+```
+
+### 2. Install Build Dependencies
 
 Open a terminal and install the necessary development packages:
 
@@ -25,11 +34,12 @@ sudo dnf install meson gcc gcc-c++ ninja-build \
     gtk-doc # (Optional, if you re-enable docs)
 ```
 
-### 2. Build and Install
+
+### 3. Build and Install
 
 Run the following commands to compile and install the library:
 
-```bash
+
 # Optional: Clean previous build if it exists
 rm -rf build
 
@@ -41,16 +51,16 @@ meson compile -C build
 
 # Install to system
 sudo meson install -C build
-```
 
-### 3. Post-Installation
+
+### 4. Post-Installation
 
 After installation, reload the udev rules and restart the fingerprint daemon:
 
-```bash
+
 sudo udevadm control --reload-rules && sudo udevadm trigger
 sudo systemctl restart fprintd
-```
+
 
 You can now register your fingerprint using the KDE System Settings ("Users") or via the command line.
 
