@@ -25,12 +25,13 @@ cd libfprint-CS9711-fedorakde
 
 Open a terminal and install the necessary development packages:
 
+```bash
 sudo dnf install meson gcc gcc-c++ ninja-build \
     glib2-devel libusb1-devel pixman-devel \
     openssl-devel libgudev-devel libgusb-devel gobject-introspection-devel \
     opencv-devel doctest-devel cmake \
     gtk-doc # (Optional, if you re-enable docs)
-
+```
 
 ### 3. Build and Install
 
@@ -64,10 +65,10 @@ You can now register your fingerprint using the KDE System Settings ("Users") or
 
 To enroll a specific finger, use the `-f` flag with the finger name:
 
-# Enroll right index finger (default)
+## Enroll right index finger (default)
 fprintd-enroll -f right-index-finger
 
-# Enroll left index finger
+## Enroll left index finger
 fprintd-enroll -f left-index-finger
 
 **Valid finger names:**
