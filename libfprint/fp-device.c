@@ -483,6 +483,11 @@ fp_device_class_init (FpDeviceClass *klass)
                          NULL,
                          G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
 
+  /**
+   * FpDevice:open: (getter is_open)
+   *
+   * Whether the device is open.
+   */
   properties[PROP_OPEN] =
     g_param_spec_boolean ("open",
                           "Opened",
@@ -649,7 +654,7 @@ fp_device_get_name (FpDevice *device)
 }
 
 /**
- * fp_device_is_open:
+ * fp_device_is_open: (getter open)
  * @device: A #FpDevice
  *
  * Returns: Whether the device is open or not

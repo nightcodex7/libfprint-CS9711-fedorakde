@@ -1374,7 +1374,6 @@ int remove_perimeter_pts(MINUTIAE *minutiae,
     int i, j, ret, *to_remove;
     int *left, *left_up, *left_down;
     int *right, *right_up, *right_down;
-    int removed = 0;
     int left_min, right_max;
 
     if (!lfsparms->remove_perimeter_pts)
@@ -1473,7 +1472,6 @@ int remove_perimeter_pts(MINUTIAE *minutiae,
     for (i = minutiae->num - 1; i >= 0; i--) {
         /* If the current minutia index is flagged for removal ... */
         if (to_remove[i]){
-            removed ++;
             /* Remove the minutia from the minutiae list. */
             if((ret = remove_minutia(i, minutiae))){
                 free(to_remove);

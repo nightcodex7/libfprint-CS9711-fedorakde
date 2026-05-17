@@ -1,0 +1,21 @@
+module fprintd-libfprint 1.0;
+
+##############################################################################
+# fprintd SELinux policy for libfprint-CS9711
+#
+# OpenCV (used by the sigfm module) reads /proc/sys/vm/nr_hugepages at
+# startup for hugepage-backed memory optimization. This is benign and
+# expected behaviour. This policy grants fprintd the minimum permissions
+# required to read that file without triggering AVC denials.
+##############################################################################
+
+require {
+        type fprintd_t;
+        type sysctl_vm_t;
+        class file { getattr open read };
+}
+
+#============= fprintd_t ==============
+# Allow fprintd to stat, open and read /proc/sys/vm/nr_hugepages.
+# This is triggered by OpenCV (libsigfm) at initialisation time.
+allow fprintd_t sysctl_vm_t:file { getattr open read };

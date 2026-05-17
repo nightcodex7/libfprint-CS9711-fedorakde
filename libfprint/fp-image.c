@@ -519,14 +519,14 @@ fp_image_get_minutiae (FpImage *self)
 }
 
 /**
- * fp_image_get_sigfm_info:
+ * fp_image_get_sigfm_info: (skip)
  * @self: A #FpImage
  *
  * Gets the SIGFM keypoints and descriptors for an image. This data must
  * not be modified or freed. You need to first extract keypoints and
  * descriptors using fp_image_extract_sigfm_info().
  *
- * Returns: (transfer none) (element-type SigfmImgInfo): The detected minutiae
+ * Returns: (transfer none): The SIGFM image info struct
  */
 SigfmImgInfo *
 fp_image_get_sigfm_info (FpImage * self)
@@ -562,6 +562,29 @@ fp_image_extract_sigfm_info (FpImage * self, GCancellable * cancellable,
   g_task_set_task_data (task, data,
                         (GDestroyNotify) fp_image_sigfm_extract_free);
   g_task_run_in_thread (task, fp_image_sigfm_extract_thread_func);
+}
+
+/**
+ * fp_image_extract_sigfm_info_finish:
+ * @self: A #FpImage
+ * @result: A #GAsyncResult
+ * @error: Return location for errors, or %NULL to ignore
+ *
+ * Finish SIGFM keypoint extraction in an image.
+ *
+ * Returns: %TRUE on success
+ */
+gboolean
+fp_image_extract_sigfm_info_finish (FpImage      * self,
+                                    GAsyncResult * result,
+                                    GError      ** error)
+{
+  g_return_val_if_fail (FP_IS_IMAGE (self), FALSE);
+  g_return_val_if_fail (g_task_is_valid (result, self), FALSE);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) ==
+                        fp_image_extract_sigfm_info, FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 /**

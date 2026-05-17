@@ -1,4 +1,42 @@
+# Build directories
+build/
+_build/
+
+# Meson introspection
+*.wrap
+
+# Compiled objects
 *.o
+*.so
+*.so.*
+*.a
+
+# Editor and IDE files
 *.swp
-_build
-build
+*.swo
+*~
+.vscode/
+.idea/
+*.kate-swp
+
+# SELinux intermediate build artifacts (compiled policy kept in data/selinux/)
+*.mod
+*.te~
+
+# Local environment / devbox
+.envrc
+devbox.json
+devbox.lock
+.devbox/
+.cache/
+
+# CI overrides (this repo uses GitHub, not freedesktop GitLab CI)
+.gitlab-ci.yml
+
+# Issue / debug scratch files
+libfingerprint_issues.txt
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
